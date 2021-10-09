@@ -8,19 +8,20 @@ const jwt = require("jsonwebtoken");
 const User = require("../../models/Users");
 const {
   check,
-  valdiationResult,
   validationResult,
 } = require("express-validator");
 
 // Register User
 router.post(
   "/",
-  [check("name", "Name is Required").not().isEmpty()],
-  check("email", "Please include valid Email").isEmail(),
-  check(
-    "password",
-    "Please enter a password with 6 or more characters"
-  ).isLength({ min: 6 }),
+  [
+    check("name", "Name is Required").not().isEmpty(),
+    check("email", "Please include valid Email").isEmail(),
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 })
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
