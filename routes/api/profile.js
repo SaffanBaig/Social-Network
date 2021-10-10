@@ -82,7 +82,6 @@ router.get("/", async (req, res) => {
 })
 
 // Get profile by id
-
 router.get("/user/:user_id", async (req, res) => {
   try{
     const profiles = await Profile.findOne({_id: req.params.user_id}).populate('user', ['name', 'avatar'])
@@ -96,5 +95,16 @@ router.get("/user/:user_id", async (req, res) => {
     return res.status(500).send('Server Error')
   }
 
+})
+
+// Delete Profile, User and post
+router.delete("/", auth, async (req, res) => {
+  try{
+    await Profile.findOneAndRemove({user: req.user.id})
+    await User.findOneAndRemove({_id: req.user.id})
+    return res.json({'msg': 'User removed'})
+  } catch(err){
+    return res.status(500).send('Internal Server Error')
+  }
 })
 module.exports = router;
